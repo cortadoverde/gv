@@ -7,7 +7,7 @@ interface RecipeBookCVProps {
   cv: CV;
 }
 
-const recipe = ({ cv }: RecipeBookCVProps) => {
+const Recipe = ({ cv }: RecipeBookCVProps) => {
   const [currentSection, setCurrentSection] = useState<string>('info');
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
@@ -202,4 +202,4 @@ const recipe = ({ cv }: RecipeBookCVProps) => {
   );
 };
 
-export default recipe; 
+export default Recipe; 

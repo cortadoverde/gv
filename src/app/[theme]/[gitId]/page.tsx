@@ -15,13 +15,11 @@ async function getGistData(gistId: string) {
 }
 
 // Componente de la página dinámica
-export default async function CVPage({
-  params
-}: {
-  params: { gitId: string; theme: string }
-}) {
-  const { gitId, theme } = params;
-  const cvData = await getGistData(gitId);
+export default async function CVPage(params: {
+    params: Promise<{ gistId: string, theme: string }>;
+  }) {
+  const { gistId, theme } = await params.params;
+  const cvData = await getGistData(gistId);
   
   const ThemeComponent = dynamic(() => import(`@/components/${theme}`), {
     ssr: true
