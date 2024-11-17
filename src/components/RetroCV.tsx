@@ -19,27 +19,27 @@ export default function RetroCV({ cv }: RetroCVProps) {
     { id: 'langs', label: 'IDIOMAS' }
   ];
 
-  const handleKeyDown = (e: KeyboardEvent) => {
-    switch(e.key) {
-      case 'ArrowUp':
-        setSelectedOption(prev => (prev > 0 ? prev - 1 : menuOptions.length - 1));
-        break;
-      case 'ArrowDown':
-        setSelectedOption(prev => (prev < menuOptions.length - 1 ? prev + 1 : 0));
-        break;
-      case 'Enter':
-        setCurrentScreen(menuOptions[selectedOption].id);
-        break;
-      case 'Escape':
-        setCurrentScreen('menu');
-        break;
-    }
-  };
-
   React.useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      switch(e.key) {
+        case 'ArrowUp':
+          setSelectedOption(prev => (prev > 0 ? prev - 1 : menuOptions.length - 1));
+          break;
+        case 'ArrowDown':
+          setSelectedOption(prev => (prev < menuOptions.length - 1 ? prev + 1 : 0));
+          break;
+        case 'Enter':
+          setCurrentScreen(menuOptions[selectedOption].id);
+          break;
+        case 'Escape':
+          setCurrentScreen('menu');
+          break;
+      }
+    };
+
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [selectedOption]);
+  }, [selectedOption, menuOptions]);
 
   return (
     <div className="min-h-screen bg-[#5c94fc] p-8 font-['Press_Start_2P'] text-white">

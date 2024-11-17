@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import "./globals.css";
 import { Press_Start_2P } from 'next/font/google';
+import { Providers } from './providers'
 
 
 const pressStart2P = Press_Start_2P({
@@ -21,7 +22,9 @@ export default function RootLayout({
 }) {
   return (
     <html lang="es" className={pressStart2P.className}>
-      <body>{children}</body>
+      <body>
+        <Providers>{children}</Providers>
+      </body>
     </html>
   );
 }
