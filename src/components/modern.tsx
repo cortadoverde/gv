@@ -3,14 +3,30 @@ import './modern.css';
 
 import React, { useState } from 'react';
 import type { CV } from '@/types/cv';
-import { Mail, MapPin, Globe } from 'lucide-react';
+import { Mail, MapPin, Globe, UserCircle, Briefcase, Code2, GraduationCap, Languages   } from 'lucide-react';
 
-import { SidebarProvider, SidebarTrigger, SidebarInset } from "@/components/ui/sidebar"
+import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar"
 import { AppSidebar } from "@/components/app-sidebar"
+import { Badge } from "@/components/ui/badge"
+import {
+  Carousel,
+  CarouselContent,
+  CarouselItem,
+  CarouselNext,
+  CarouselPrevious,
+} from "@/components/ui/carousel"
+
+import PortfolioItemComponent from './modern/portfolio/PortfolioItem';
+ 
+export function BadgeSecondary() {
+  return <Badge variant="secondary">Secondary</Badge>
+}
 
 interface ModernCVProps {
   cv: CV;
 }
+
+
 
 const Modern = ({ cv }: ModernCVProps) => {
   const [activeSection, setActiveSection] = useState("info")
@@ -18,7 +34,9 @@ const Modern = ({ cv }: ModernCVProps) => {
   const sections = {
     info: {
       title: 'Perfil Profesional',
+      icon: UserCircle,
       content: () => (
+        <>
         <div className="grid grid-cols-3 gap-8">
           <div className="col-span-2">
             <div className="mb-8">
@@ -29,9 +47,26 @@ const Modern = ({ cv }: ModernCVProps) => {
               <h2 className="text-xl text-gray-300 mb-4">{cv.basics.label}</h2>
               <p className="text-gray-300 leading-relaxed">{cv.basics.summary}</p>
             </div>
+            {cv.portfolio &&
+              
+              <div className="porfolio w-[90%] m-auto">
+                <Carousel className="w-full max-w-4xl mx-auto">
+                  <CarouselContent>
+                    {cv.portfolio.map((project, index) => (
+                      
+                      <CarouselItem key={index}>
+                        <PortfolioItemComponent item={project} />
+                      </CarouselItem>
+                    ))}
+                  </CarouselContent>
+                  <CarouselPrevious />
+                  <CarouselNext />
+                </Carousel>
+              </div>
+            }
           </div>
           <div className="col-span-1">
-            <div className="space-y-4 bg-[#242424] p-6 rounded-lg">
+            <div className="space-y-4 bg-[var(--color-surface)] p-6 rounded-lg">
               <div className="flex items-center gap-2">
                 <MapPin size={18} className="text-primary" />
                 <span className="text-gray-300">
@@ -53,30 +88,30 @@ const Modern = ({ cv }: ModernCVProps) => {
             </div>
           </div>
         </div>
+              
+        </>
       )
     },
     experience: {
-      title: 'Experiencia Culinaria',
+      title: 'Experiencia',
+      icon: Briefcase,
       content: () => (
-        <div className="space-y-8">
+        <div className="grid grid-cols-2 gap-8">
           {cv.work.map((job, index) => (
-            <div key={index} className="bg-[#242424] p-6 rounded-lg">
+            <div key={index} className="bg-[var(--color-surface)] p-6 rounded-lg">
               <div className="flex justify-between items-start mb-4">
                 <div>
                   <h3 className="text-2xl font-bold text-primary">{job.company}</h3>
                   <p className="text-xl text-gray-300">{job.position}</p>
                 </div>
-                <span className="text-gray-400 text-sm">
+                <span className="text-[var(--color-primary-hover)] text-sm">
                   {job.startDate} - {job.endDate}
                 </span>
               </div>
               <p className="text-gray-300 mb-4">{job.summary}</p>
-              <div className="space-y-2">
+              <div className="flex gap-3 flex-wrap">
                 {job.highlights.map((highlight, idx) => (
-                  <div key={idx} className="flex items-center gap-2">
-                    <span className="text-primary">•</span>
-                    <span className="text-gray-300">{highlight}</span>
-                  </div>
+                  <Badge key={idx} variant="secondary">{highlight}</Badge>
                 ))}
               </div>
             </div>
@@ -85,11 +120,12 @@ const Modern = ({ cv }: ModernCVProps) => {
       )
     },
     skills: {
-      title: 'Habilidades Culinarias',
+      title: 'Habilidades',
+      icon: Code2,
       content: () => (
         <div className="grid grid-cols-2 gap-6">
           {cv.skills.map((skill, index) => (
-            <div key={index} className="bg-[#242424] p-6 rounded-lg">
+            <div key={index} className="bg-[var(--color-surface)] p-6 rounded-lg">
               <div className="flex justify-between items-center mb-4">
                 <h3 className="text-xl font-bold text-primary">{skill.name}</h3>
                 <span className="text-gray-400 text-sm">{skill.level}</span>
@@ -98,7 +134,7 @@ const Modern = ({ cv }: ModernCVProps) => {
                 {skill.keywords.map((keyword, idx) => (
                   <span
                     key={idx}
-                    className="px-3 py-1 bg-[#333333] text-gray-300 rounded-full text-sm"
+                    className="px-3 py-1 bg-color-surface-hover text-gray-300 rounded-full text-sm"
                   >
                     {keyword}
                   </span>
@@ -110,11 +146,12 @@ const Modern = ({ cv }: ModernCVProps) => {
       )
     },
     education: {
-      title: 'Formación Culinaria',
+      title: 'Formación',
+      icon: GraduationCap,
       content: () => (
         <div className="space-y-6">
           {cv.education.map((edu, index) => (
-            <div key={index} className="bg-[#242424] p-6 rounded-lg">
+            <div key={index} className="bg-[var(--color-surface)] p-6 rounded-lg">
               <div className="flex justify-between items-start">
                 <div>
                   <h3 className="text-xl font-bold text-primary">{edu.institution}</h3>
@@ -131,10 +168,11 @@ const Modern = ({ cv }: ModernCVProps) => {
     },
     languages: {
       title: 'Idiomas',
+      icon: Languages,
       content: () => (
         <div className="grid grid-cols-3 gap-6">
           {cv.languages.map((lang, index) => (
-            <div key={index} className="bg-[#242424] p-6 rounded-lg">
+            <div key={index} className="bg-[var(--color-surface)] p-6 rounded-lg">
               <h3 className="text-xl font-bold text-primary mb-2">{lang.language}</h3>
               <p className="text-gray-300">{lang.fluency}</p>
             </div>
@@ -148,33 +186,22 @@ const Modern = ({ cv }: ModernCVProps) => {
 
   return (
     <SidebarProvider>
-      <div className="flex h-screen w-full overflow-hidden">
-        <div className="h-full w-[290px]">
+      <div className="flex min-h-screen">
           <AppSidebar 
-            activeSection={activeSection} 
-            onSectionChange={setActiveSection} 
-            sections={sections}
+              activeSection={activeSection} 
+              onSectionChange={setActiveSection} 
+              sections={sections}
           />
-        </div>
         
-        <SidebarInset className="flex-1 overflow-auto">
-          <div className="flex flex-col h-full">
-            <header className="sticky top-0 z-10 flex h-16 items-center border-b bg-[var(--color-surface)]">
-              <div className="flex items-center gap-2 px-4">
-                <SidebarTrigger />
-                <h2 className="text-2xl font-bold text-[var(--color-primary)]">
-                  {sections[activeSection as keyof typeof sections].title}
-                </h2>
-              </div>
-            </header>
-            
-            <main className="flex-1 overflow-auto">
-              <div className="max-w-7xl mx-auto p-6">
-                {sections[activeSection as keyof typeof sections].content()}
-              </div>
-            </main>
-          </div>
-        </SidebarInset>
+        <div className="flex flex-col">
+          <header className="flex h-14 items-center gap-4 px-6">
+            <SidebarTrigger />
+            <h1>{sections[activeSection as keyof typeof sections].title}</h1>
+          </header>
+          <main className="flex-1 overflow-auto p-6">
+            {sections[activeSection as keyof typeof sections].content()}
+          </main>
+        </div>
       </div>
     </SidebarProvider>
   );

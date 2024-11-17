@@ -1,22 +1,40 @@
 /* Estilos base */
 :root {
-    --color-background: #1c1c1c;
-    --color-surface: #1f1f1f;
-    --color-surface-hover: #27a590;
-    --color-primary: #00ffee;
-    --color-primary-hover: #fbbf24;
-    --color-text: #ffffff;
-    --color-text-secondary: #9ca3af;
-  --color-border:hsl(from var(--color-surface) h s calc( l - 5 ));
-  --border: hsl(from var(--color-surface) h 100 l);
+  --color-background: #0a0a0a;
+  --color-surface: #0d0d0d;
+  --color-surface-hover: #0d0d0d;
+  --color-primary: #37cd80;
+  --color-primary-hover: #404040;
+  --color-text: #525252;
+  --color-text-secondary: #ffffff;
+
+  --card: from var(--color-background) h s calc(l - 5);
+  --card-foreground: from var(--color-text-secondary) h s 80;
+  --sidebar-background:  from var(--color-background) h s calc(l - 5);
+  --sidebar-foreground: from var(--color-surface) h s l;
+  --border: from var(--color-surface) h s l / 0.5;
+  --sidebar-primary: 240 5.9% 10%;
+  --sidebar-primary-foreground: 0 0% 98%;
+  --sidebar-accent: 240 4.8% 95.9%;
+  --sidebar-accent-foreground: 240 5.9% 10%;
+  --sidebar-border: 220 13% 91%;
+  --sidebar-ring: 217.2 91.2% 59.8%;
+  
   --color-primary-highlight:hsl(from var(--color-primary) calc( h + 5 ) s l) ;
 }
 
-
-
-*{
-    border-color: var(--color-border);
+.text-sidebar-foreground {
+  color: var(--color-text-secondary);
 }
+
+.hover\:text-sidebar-accent-foreground:hover{
+  color:var(--color-text-secondary);
+}
+
+.bg-color-surface-hover {
+  background-color: var(--color-surface-hover);
+}
+
 /* Contenedor principal */
 .min-h-screen {
   min-height: 100vh;
@@ -136,3 +154,5 @@ h1, h2, h3 {
 .scrollarea-wrapper ::-webkit-scrollbar-thumb:hover {
   background: var(--color-primary-hover);
 }
+
+

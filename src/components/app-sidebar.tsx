@@ -28,26 +28,33 @@ import { Copy } from "lucide-react"
 const colorVariables = [
   { name: '--color-background', label: 'Fondo', defaultValue: '#1a1a1a' },
   { name: '--color-surface', label: 'Superficie', defaultValue: '#242424' },
-  { name: '--color-surface-hover', label: 'Superficie Hover', defaultValue: '#333333' },
+  { name: '--color-surface-hover', label: 'Item', defaultValue: '#333333' },
   { name: '--color-primary', label: 'Primario', defaultValue: '#c5b41e' },
-  { name: '--color-primary-hover', label: 'Primario Hover', defaultValue: '#fbbf24' },
+  { name: '--color-primary-hover', label: 'Sac', defaultValue: '#fbbf24' },
   { name: '--color-text', label: 'Texto', defaultValue: '#e5e7eb' },
   { name: '--color-text-secondary', label: 'Texto Secundario', defaultValue: '#9ca3af' },
 ]
 
+interface Section {
+  title: string;
+  content: () => JSX.Element;
+  icon: React.ElementType;
+}
 
 interface AppSidebarProps {
   activeSection: string;
   onSectionChange: (section: string) => void;
-  sections: Record<string, { title: string; content: () => JSX.Element }>;
+  sections: Record<string, Section>;
 }
 
 export function AppSidebar({ activeSection, onSectionChange, sections }: AppSidebarProps) {
   const [showColorConfig, setShowColorConfig] = useState(false)
+ 
   const [colors, setColors] = useState<Record<string, string>>(() => {
     const initialColors: Record<string, string> = {}
     colorVariables.forEach((variable) => {
-      initialColors[variable.name] = variable.defaultValue
+      const computedValue = getComputedStyle(document.documentElement).getPropertyValue(variable.name).trim() || variable.defaultValue;
+      initialColors[variable.name] = computedValue;
     })
     return initialColors
   })
@@ -100,8 +107,9 @@ export function AppSidebar({ activeSection, onSectionChange, sections }: AppSide
   }, [colors])
 
   return (
-    <Sidebar className="border-r border-[var(--color-border)]">
-      <ScrollArea className=" pr-4">
+    <Sidebar  className="side">
+
+      <ScrollArea className="pr-4">
         <SidebarContent>
           <SidebarGroup>
             <SidebarGroupLabel className="text-[var(--color-text)]">
@@ -115,7 +123,8 @@ export function AppSidebar({ activeSection, onSectionChange, sections }: AppSide
                       onClick={() => onSectionChange(key)}
                       className={`w-full ${activeSection === key ? 'bg-[var(--color-surface-hover)] text-[var(--color-primary)]' : ''}`}
                     >
-                      {section.title}
+                      <section.icon className="h-4 w-4" />
+                      <span>{section.title}</span>
                     </SidebarMenuButton>
                   </SidebarMenuItem>
                 ))}
@@ -130,7 +139,7 @@ export function AppSidebar({ activeSection, onSectionChange, sections }: AppSide
               </SidebarGroupLabel>
               <SidebarGroupContent>
                 <div className="scrollarea-wrapper">
-                  <ScrollArea className="h-[250px] pr-4">
+                  
                     <div className="grid grid-cols-2 gap-4 p-4">
                       {colorVariables.map((variable) => (
                         <div key={variable.name} className="space-y-2">
@@ -145,7 +154,6 @@ export function AppSidebar({ activeSection, onSectionChange, sections }: AppSide
                         </div>
                       ))}
                     </div>
-                  </ScrollArea>
                 </div>
               </SidebarGroupContent>
             </SidebarGroup>
