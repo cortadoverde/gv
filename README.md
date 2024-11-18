@@ -1,36 +1,138 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Gist Vitae
 
-## Getting Started
+Visualizador de CVs en formato Gist.
 
-First, run the development server:
+## Interface
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+```tsx
+export interface CV {
+  basics: {
+    name: string;
+    label: string;
+    email: string;
+    summary: string;
+    location: {
+      city: string;
+      country: string;
+    };
+    profiles: Array<{
+      network: string;
+      url: string;
+    }>;
+  };
+  work: Array<{
+    company: string;
+    position: string;
+    startDate: string;
+    endDate?: string;
+    summary: string;
+    highlights: string[];
+  }>;
+  education: Array<{
+    institution: string;
+    area: string;
+    studyType: string;
+    startDate: string;
+    endDate?: string;
+  }>;
+  skills: Array<{
+    name: string;
+    level: string;
+    keywords: string[];
+  }>;
+  languages: Array<{
+    language: string;
+    fluency: string;
+  }>;
+  portfolio: Array<{
+    title: string;
+    description: string;
+    category: string;
+    date: string;
+    coverImage: string;
+    images: Array<{
+      url: string;
+      caption?: string;
+    }>;
+    tools: string[];
+    tags: string[];
+    links: Array<{
+      type: 'live' | 'github' | 'behance' | 'dribbble' | 'other';
+      url: string;
+      label?: string;
+    }>;
+    collaborators?: Array<{
+      name: string;
+      role: string;
+      url?: string;
+    }>;
+    stats?: {
+      views?: number;
+      likes?: number;
+      comments?: number;
+    };
+    featured: boolean;
+    processSteps?: Array<{
+      title: string;
+      description: string;
+      image?: string;
+    }>;
+  }>;
+}
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+```json
+{
+  "basics": {
+    "name": "",
+    "label": "",
+    "email": "",
+    "summary": "",
+    "location": {
+      "city": "",
+      "country": ""
+    },
+    "profiles": []
+  },
+  "work": [],
+  "education": [],
+  "skills": [],
+  "languages": [],
+  "portfolio": []
+}
+```
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Next App
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+La aplicación permite renderizar un CV interactivo a partir de un objeto JSON. El objeto JSON debe tener la estructura de la interfaz CV.
 
-## Learn More
+```tsx
+export default function CVPage({ cv }: { cv: CV }) {
+  return (
+    <main className="min-h-screen">
+      <ConsoleCV cv={cv} />
+    </main>
+  );
+}
+```
 
-To learn more about Next.js, take a look at the following resources:
+## Router
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+`/` muestra el editor de CV.
 
-## Deploy on Vercel
+`/render/:theme/:gistId` muestra el CV interactivo de un Gist.
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+:theme es el nombre del componente que va a renderizar el CV. Por ejemplo, si se quiere renderizar el CV con la interfaz de modern, se debe usar `/render/modern/:gistId`.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+:gistId es el ID del Gist que contiene el CV.
+
+### Themes
+
+- modern: Interfaz moderna de CV.
+- console: Interfaz de consola de CV.
+- recipe: Interfaz de receta de CV.
+
+### Ejemplos
+
+- [https://gv-mocha.vercel.app/render/modern/82c57d82c8c97331177e0f3340b98c71](https://gv-mocha.vercel.app/render/modern/82c57d82c8c97331177e0f3340b98c71)
